@@ -60,7 +60,7 @@ pipeline {
                 echo "Deploy to Kubernetes"
 
                 export KUBECONFIG=/root/.kube/config
-
+                ls -ltr
                 cp k8s/deployment.yml k8s/cp-deployment.yml
                 sed -i "s/BUILD_NUMBER/${BUILD_NUMBER}/g" k8s/cp-deployment.yaml
 
