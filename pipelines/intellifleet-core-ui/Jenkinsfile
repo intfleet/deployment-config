@@ -33,7 +33,7 @@ pipeline {
                 -v $WORKSPACE:/app \
                 -w /app \
                 node:20 \
-                sh -c "npm install --legacy-peer-deps && npm run build" 
+                sh -c "npm install --legacy-peer-deps && npm run build:test" 
                 ''' 
             } 
         }
