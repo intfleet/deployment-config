@@ -61,9 +61,10 @@ pipeline {
 
                 export KUBECONFIG=/root/.kube/config
 
-                sed -i "s/__BUILD_NUMBER__/${BUILD_NUMBER}/g" k8s/deployment.yaml
+                cp k8s/deployment.yml k8s/cp-deployment.yml
+                sed -i "s/BUILD_NUMBER/${BUILD_NUMBER}/g" k8s/cp-deployment.yaml
 
-                kubectl apply -f k8s/deployment.yaml -n $K8S_NAMESPACE
+                kubectl apply -f k8s/cp-deployment.yaml -n $K8S_NAMESPACE
                 kubectl apply -f k8s/service.yaml -n $K8S_NAMESPACE
 
                 kubectl rollout status deployment/intellifleet-core-api
