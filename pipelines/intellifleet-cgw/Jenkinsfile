@@ -45,7 +45,7 @@ pipeline {
                 sh '''
                 echo "Build Docker Image"
                 docker build -t $IMAGE_NAME:$IMAGE_TAG .
-                docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:latest
+                docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:$IMAGE_TAG
                 '''
             }
         }
@@ -54,7 +54,7 @@ pipeline {
             steps {
                 sh '''
                 echo "Importing docker image as .tar file..."
-                docker save $IMAGE_NAME:latest -o k8s/device-data-handler.tar
+                docker save $IMAGE_NAME:$IMAGE_TAG -o k8s/device-data-handler.tar
                 ctr -n k8s.io images import k8s/device-data-handler.tar
 
 
