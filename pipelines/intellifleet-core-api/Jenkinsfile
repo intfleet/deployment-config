@@ -62,7 +62,7 @@ pipeline {
                 export KUBECONFIG=/root/.kube/config
   
                 cp k8s/deployment.yaml k8s/cp-deployment.yaml
-                sed -i "s/BUILD_NUMBER/${BUILD_NUMBER}/g" k8s/cp-deployment.yaml
+                sed -i "s/BUILD_NUMBER/$IMAGE_TAG/g" k8s/cp-deployment.yaml
 
                 kubectl apply -f k8s/cp-deployment.yaml -n $K8S_NAMESPACE
                 kubectl apply -f k8s/service.yaml -n $K8S_NAMESPACE

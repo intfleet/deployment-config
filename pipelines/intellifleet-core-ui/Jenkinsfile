@@ -45,7 +45,7 @@ pipeline {
                 sh '''
                 echo "Build Docker Image"
                 docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
-                docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:latest
+                docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:$IMAGE_TAG
                 '''
             }
         }
@@ -54,7 +54,7 @@ pipeline {
             steps {
                 sh '''
                 echo "Save Docker Image"
-                docker save $IMAGE_NAME:latest -o k8s/${TAR_FILE}
+                docker save $IMAGE_NAME:$IMAGE_TAG -o k8s/${TAR_FILE}
                 ls -l k8s/${TAR_FILE}
                 '''
             }
@@ -71,8 +71,13 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh 'kubectl apply -f k8s/deployment.yaml'
-                sh 'kubectl apply -f k8s/service.yaml'
+                sh '''
+                    cp k8s/deployment.yaml k8s/cp-deployment.yaml
+                    sed -i "s/BUILD_NUMBER/$IMAGE_TAG/g" k8s/cp-deployment.yaml
+
+                    kubectl apply -f k8s/cp-deployment.yaml
+                    kubectl apply -f k8s/service.yaml
+                '''                
             }
         }
 
